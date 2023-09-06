@@ -1,0 +1,61 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+
+      <div class="grid mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>User List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex md:justify-content-end justify-content-between">
+          <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary"
+            link="/dashboard"></app-button>
+          <app-button type="button" backgroundColor="var(--PRIMARY)" iconBtn="pi pi-fw pi-plus" label="Add New User"
+            classBtn="p-button-primary" link="/users/new"></app-button>
+        </div>
+
+        <div class="card col-12">
+          <p-table [value]="users" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[5, 10, 15]" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  No
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Name
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Email
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Role
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-u let-i="rowIndex">
+              <tr>
+                <td>{{ i+1 }}</td>
+                <td>{{ u.fullName }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.role }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No users found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

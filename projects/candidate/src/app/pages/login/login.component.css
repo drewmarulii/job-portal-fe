@@ -1,0 +1,6 @@
+.pictureSide {
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(19, 98, 26, 0.537) 0%, rgba(255, 255, 255, 0.194) 68.23%), url(../../../assets/banner2.png) no-repeat;
+  background-size: auto, auto;
+  background-size: cover;
+}

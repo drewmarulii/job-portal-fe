@@ -1,0 +1,47 @@
+
+<div class="grid grid-nogutter surface-section text-800">
+  <div class="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center ">
+      <section>
+          <span class="block text-6xl font-bold mb-1">Hi! {{ name }} Welcome to JobRoad,</span>
+          <div class="text-6xl text-green-700 font-bold mb-3">A place to find new opportunities</div>
+          <p class="mt-0 mb-4 text-700 line-height-3">Here you can find your dream jobs that suits you, also we look forward seeing you get that job that you have always wanted.</p>
+
+          <app-button *ngIf="isLogin" label="Browse Jobs" link="/jobs" backgroundColor="var(--PRIMARY)"></app-button>
+      </section>
+  </div>
+  <div class="col-12 md:col-6 overflow-hidden">
+      <img src="../../../assets/banner.png" alt="Image" class="md:ml-auto block md:h-full" style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%)">
+  </div>
+</div>
+
+<div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
+  <div class="mb-3 font-bold text-3xl">
+      <span class="text-900">Many Jobs, </span>
+      <span class="text-green-700">Many Chances</span>
+  </div>
+  <div class="text-700 mb-6">Browse jobs by using our application, see what kind of jobs that suits you. Apply and wait for the result</div>
+  <div class="grid">
+      <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+              <i class="pi pi-briefcase text-4xl text-green-700"></i>
+          </span>
+          <div class="text-900 text-xl mb-3 font-medium">Easy Apply</div>
+          <span class="text-700 line-height-3">The company that posted the job that you applied before will automatically read your data.</span>
+      </div>
+      <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+              <i class="pi pi-mobile text-4xl text-green-700"></i>
+          </span>
+          <div class="text-900 text-xl mb-3 font-medium">Responsive</div>
+          <span class="text-700 line-height-3">Our application can be accessed via smartphone and tablets to ease your use.</span>
+      </div>
+      <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+              <i class="pi pi-check-circle text-4xl text-green-700"></i>
+          </span>
+          <div class="text-900 text-xl mb-3 font-medium">Easy to Use</div>
+          <span class="text-700 line-height-3">Just register, input your data, choose the job you want and follow the process.</span>
+      </div>
+  </div>
+</div>
+

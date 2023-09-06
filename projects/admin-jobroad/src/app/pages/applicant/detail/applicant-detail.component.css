@@ -1,0 +1,9 @@
+::ng-deep .p-steps .p-steps-item.p-highlight .p-steps-number {
+  background: #286e33;
+  color: #FFF;
+}
+
+::ng-deep .p-steps ul{
+    flex-wrap :wrap;
+}
+

@@ -1,0 +1,70 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <div class="grid mt-4 mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>Question Option List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex justify-content-end">
+          <app-button type="button" label="Back" class="mr-2" iconBtn="pi pi-arrow-left" classBtn="p-button-secondary"
+            link="/questions"></app-button>
+        </div>
+
+        <div class="card col-12">
+          <p-table [value]="questionOptions" [tableStyle]="{ 'min-width': '50rem' }" selectionMode="single">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  No
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Question Label
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Is Correct
+                  </div>
+                </th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-q let-i="rowIndex">
+              <tr (click)="updateClick(q.id)" class="cursor-pointer">
+                <td>{{ i+1 }}</td>
+                <td>{{q.optionLabel}}</td>
+                <td>{{q.isCorrect}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-dialog header="Update Option" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [modal]="true"
+    [(visible)]="modal">
+
+    <form [formGroup]="optionUpdateReqDto" (ngSubmit)="onSubmit()">
+      <div class="grid">
+        <div class="col-12 md:col-3">
+          <label for="optionLabel">Option Label <span class="text-red-500">*</span></label>
+        </div>
+        <div class="col-12 md:col-9">
+          <textarea id="optionLabel" formControlName="optionLabel" pInputTextarea></textarea>
+        </div>
+        <div class="col-12 md:col-3">
+          <label for="isCorrect">Is Correct <span class="text-red-500">*</span></label>
+        </div>
+        <div class="flex flex-wrap align-items-center justify-content-center">
+          <div *ngFor="let o of option">
+            <p-radioButton [inputId]="o.key" formControlName="isCorrect" [value]="o.name"></p-radioButton>
+            <label [for]="o.name" class="ml-2 mr-2">{{ o.key }}</label>
+          </div>
+        </div>
+      </div>
+      <app-button type="submit" backgroundColor="var(--PRIMARY)" label="Update" class="mr-2"></app-button>
+    </form>
+
+  </p-dialog>
+</div>

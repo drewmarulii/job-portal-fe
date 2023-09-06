@@ -1,0 +1,42 @@
+<div class="col-12">
+  <div class="flex justify-content-between flex-wrap card-container mb-3">
+    <div class="flex align-items-center justify-content-center">
+      <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/companies"></app-button>
+    </div>
+    <div class="flex align-items-center justify-content-center">
+      <app-button backgroundColor="var(--PRIMARY)" type="button" label="Update Company" classBtn="p-button-primary"
+        link="/companies/{{ company.id }}/update"></app-button>
+    </div>
+  </div>
+  <p-card header="Company Detail">
+
+    <div class="grid grid-nogutter">
+      <div class="col-12 md:col-3">
+        <ng-container *ngIf="company?.photoId">
+          <p-image class="profile-picture" [src]="company.photoId|url "
+            imageClass="w-10rem h-8rem md:w-15rem md:h-15rem" alt="Image">
+            <ng-template pTemplate="indicator">
+              <i class="pi pi-check"></i>
+            </ng-template>
+          </p-image>
+        </ng-container>
+      </div>
+      <div class="col-12 md:col-9">
+        <div class="grid mt-2">
+          <div class="col-5"><i class="pi pi-home"></i> Company Name</div>
+          <div class="col-2">:</div>
+          <div class="col-5">{{company.companyName}}</div>
+          <div class="col-5"><i class="pi pi-building"></i> Company Address</div>
+          <div class="col-2">:</div>
+          <div class="col-5">{{company.address}}</div>
+          <div class="col-5"><i class="pi pi-phone"></i> Company Phone Number</div>
+          <div class="col-2">:</div>
+          <div class="col-5">{{company.companyPhone}}</div>
+          <div class="col-5"><i class="pi pi-link"></i> Company Url</div>
+          <div class="col-2">:</div>
+          <div class="col-5">{{company.companyUrl}}</div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

@@ -1,0 +1,31 @@
+<p-card header="Questions" styleClass="">
+  <form [formGroup]="answerDto" (ngSubmit)="onSubmit()">
+    <div *ngFor="let q of question; let k = index" class="ml-3">
+      <div class="grid">
+        <div class="col-12">
+          <label for="name">{{k+1}}. {{q.questionDetail}} </label>
+        </div>
+
+        <div class="col-12">
+          <label for="answer">Answers : </label>
+        </div>
+        <div class="option" formArrayName="answers">
+          <div class="options" [formGroupName]="k">
+            <div class="col-12 field-checkbox" *ngFor="let opt of q.options">
+              <p-radioButton [value]="opt.id" (onClick)="selected($event,k)" formControlName="questionOptionId{{k}}"
+                [inputId]="opt.optionLabel">
+              </p-radioButton>
+              <label [for]="k">{{opt.optionLabel}}</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-12">
+      <app-button type="submit" backgroundColor="var(--PRIMARY)" label="Submit" class="mr-2">
+      </app-button>
+      <app-button label="Cancel" classBtn="p-button-secondary" link="/jobs/applied"></app-button>
+    </div>
+  </form>
+</p-card>

@@ -1,0 +1,80 @@
+<div class="grid justify-content-center">
+  <div class="col-12 md:col-10">
+
+    <h1>Create Question(s)</h1>
+    <div class="card">
+      <div>
+        <form [formGroup]="questionsInsertReqDto" (ngSubmit)="onSubmit()">
+          <div class="col-12 md:col-9">
+            <div class="mb-3 ">
+              <app-button typeBtn="button" backgroundColor="var(--PRIMARY)" (clickChange)="onAdd()" iconBtn="pi pi-plus"
+                label="Add Question">
+              </app-button>
+            </div>
+          </div>
+
+          <div *ngFor="let f of forms.controls; let i = index" formArrayName="newQuestions">
+            <p-card styleClass="mb-3" [formGroupName]="i" header="Question {{ i+1 }}">
+
+              <div class="grid">
+                <div class="col-12 md:col-12">
+                  <div class="mb-3">
+                    <label id="questionDetail" class="form-label">Question Detail <span class="text-red-500">*</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid">
+                <div class="col-12 md:col-10">
+                  <div class="mb-3 ">
+                    <textarea rows="2" cols="30" pInputTextarea [autoResize]="true" formControlName="questionDetail"
+                      style="width: 100%;"></textarea>
+                  </div>
+                </div>
+                <div class="col-12 md:col-2">
+                  <app-button (clickChange)="remove(i)" label="Remove" iconBtn="pi pi-trash" classBtn="p-button-danger">
+                  </app-button>
+                </div>
+              </div>
+              <div class="grid">
+                <div class="col-12 md:col-12">
+                  <app-button typeBtn="button" (click)="onAddOption(i)" iconBtn="pi pi-plus-circle"
+                    backgroundColor="var(--PRIMARY)" label="Add Options">
+                  </app-button>
+                </div>
+              </div>
+
+              <div class="col-12 m-0" formArrayName="options"
+                *ngFor="let o of questionOption(i).controls; let j = index">
+                <div [formGroupName]="j">
+                  <h4 class="mt-0 mb-2">Option {{ j+1 }}</h4>
+                  <div class="grid">
+                    <div class="col-12 md:col-7">
+                      <input type="text" pInputText formControlName="optionLabel" style="width: 100%;" />
+                    </div>
+                    <div class="col-12 md:col-1">
+                      <p-dropdown formControlName="isCorrect" [options]="options" optionLabel="name" optionValue="value"
+                        placeholder="Select option"></p-dropdown>
+                    </div>
+                    <div class="col-12 md:col-2 flex justify-content-end">
+                      <app-button (clickChange)="removeOption(i,j)" iconBtn="pi pi-minus-circle" label="Delete Option"
+                        classBtn="p-button-danger">
+                      </app-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-card>
+          </div>
+
+          <div class="col-12 mt-4">
+            <app-button type="submit" backgroundColor="var(--PRIMARY)" label="Save" iconBtn="pi pi-save" class="mr-2">
+            </app-button>
+            <app-button label="Cancel" classBtn="p-button-secondary" link="/questions"></app-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

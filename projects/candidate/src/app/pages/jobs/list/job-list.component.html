@@ -1,0 +1,114 @@
+<div class="grid grid-nogutter mt-3">
+  <div class="col-12 md:col-12">
+    <div>
+      <div class="grid grid-nogutter pl-1">
+        <div class="col-12 md:col-3 pr-1">
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input type="text" [(ngModel)]="title" pInputText placeholder="Job Title" class="w-full" />
+          </div>
+        </div>
+        <div class="col-12 md:col-3 pr-1">
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-building"></i>
+            <input type="text" [(ngModel)]="location" pInputText placeholder="Location" class="w-full" />
+          </div>
+        </div>
+        <div class="col-12 md:col-3 pr-1">
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-money-bill"></i>
+            <input type="text" [(ngModel)]="salary" pInputText placeholder="Minimum Salary" class="w-full" />
+          </div>
+        </div>
+        <div class="col-12 md:col-3 flex align-item-center">
+          <app-button label="Search" (click)="search()" backgroundColor="var(--PRIMARY)" iconBtn="pi pi-search">
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-nogutter pl-2 pt-4">
+
+  <div class="col-12">
+    {{jobs?.length}} Jobs Found
+  </div>
+</div>
+
+<div class="grid grid-nogutter">
+  <div class="col-12 md:col-9 p-5">
+    <div class="card-scroll">
+      <p-card *ngFor="let j of jobs" class="card-hover" styleClass="card-hover mr-4 mb-2 mt-2">
+        <div class="flex justify-content-end cursor-pointer mb-3">
+          <i class="pi pi-bookmark" style="font-size: 2rem" *ngIf="!j.isBookmark" (click)="updateSavedJob(j.id)"></i>
+          <i class="pi pi-bookmark-fill" style="font-size: 2rem" *ngIf="j.isBookmark"
+            (click)="deleteSavedJob(j.id)"></i>
+        </div>
+        <div class="grid grid-nogutter cursor-pointer" routerLink="/jobs/{{j.id}}/detail">
+          <div class="col-12 md:col-2 text-center">
+            <p-image [src]="j.fileId | url" imageClass="w-5rem h-5rem md:w-8rem md:h-9rem" alt="Image">
+              <ng-template pTemplate="indicator">
+                <i class="pi pi-check"></i>
+              </ng-template>
+            </p-image>
+          </div>
+          <div class="col-12 md:col-10 pl-2">
+            <div class="col-12">
+              <span style="font-size: 1.75rem; font-weight: bold;"> {{j.jobName}}</span>
+            </div>
+            <div class="col-12">
+              <span style="font-size: 1rem; font-weight: bold;"> {{j.companyName}}</span>
+            </div>
+            <!-- Address & Salary -->
+            <div class="col-12 md:col-12">
+              <div class="grid grid-nogutter">
+                <div class="col-12 md:col-6">
+                  <i class="pi pi-building"></i> {{j.address}}
+                </div>
+                <div class="col-12 md:col-6">
+                  <i class="pi pi-money-bill"></i> {{j.expectedSalaryMin}} - {{ j.expectedSalaryMax }}
+                </div>
+              </div>
+            </div>
+            <!-- Employment Type & Start Date -->
+            <div class="col-12 md:col-12">
+              <div class="grid grid-nogutter">
+                <div class="col-12 md:col-6">
+                  <i class="pi pi-briefcase"></i> {{j.employementTypeName}}
+                </div>
+                <div class="col-12 md:col-6">
+                  <i class="pi pi-clock"></i> Deadline: {{j.endDate}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+    </div>
+  </div>
+  <div class="col-12 md:col-3">
+    <span style="font-size: 1.25rem; font-weight: bold;">
+      Top Salary Jobs
+    </span>
+    <div>
+      <p-card *ngFor="let j of jobsTopSalary" class="card-hover" styleClass="card-hover mr-4 mb-2 mt-2">
+        <div class=" grid grid-nogutter cursor-pointer" routerLink="/jobs/{{j.id}}/detail">
+          <div class="col-12 md:col-2 text-center">
+            <p-image [src]="j.fileId | url" imageClass="w-6rem h-6rem md:w-3rem md:h-3rem" alt="Image">
+              <ng-template pTemplate="indicator">
+                <i class="pi pi-check"></i>
+              </ng-template>
+            </p-image>
+          </div>
+          <div class="col-12 md:col-10 pl-2 p-0">
+            <span class="mt-0" style="font-size: 1.2rem; font-weight: bold;"> {{j.jobName}}</span>
+            <p style="font-size: 1rem;;" class="mt-0"> {{j.companyName}}</p>
+            <i class="pi pi-money-bill"></i> {{j.expectedSalaryMin}} - {{ j.expectedSalaryMax }}
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

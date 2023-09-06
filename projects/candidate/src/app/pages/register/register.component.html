@@ -1,0 +1,91 @@
+<div class="container grid grid-nogutter h-screen">
+  <div class="col-12 md:col-5 formSide justify-content-center pl-7 pr-7 mb-4">
+    <div class="flex justify-content-between pt-4 pb-0 grid grid-nogutter pb-6">
+      <div class="col-12 md:col-6 homeBtn cursor-pointer text-sm" routerLink="/landing">
+        <i class="pi pi-home"></i> Home
+      </div>
+      <div class="registerBtn col-12 md:col-6 text-sm">
+        <span class="text-900">
+          Have an account?
+        </span>
+        <span class="text-green-700 cursor-pointer" routerLink="/login">
+          Sign In
+        </span>
+      </div>
+    </div>
+    <div class="container flex align-items-center justify-content-center align-item-center flex-column">
+      <div class="text-center">
+        <img src="../../../assets/jobroad.png" alt="Logo Jobroad" width="300">
+        <div class="text-black-900 text-lg font-medium mb-3">Register</div>
+      </div>
+
+      <div>
+        <form [formGroup]="registerReqDto" (ngSubmit)="register()">
+          <div class="" formGroupName="profile">
+            <label for="fullName" class="block text-900 font-medium mb-2">Full Name <span
+                class="text-red-500">*</span></label>
+            <input id="fullName" formControlName="fullname" type="text" pInputText class="w-full mb-3">
+            <span class="text-red-500 ml-2" *ngIf="
+            registerReqDto.get('profile.fullname')!.invalid &&
+            !registerReqDto.get('profile.fullname')!.value &&
+            (registerReqDto.get('profile.fullname')!.dirty ||
+              registerReqDto.get('profile.fullname')!.touched)
+          ">Fullname Required</span>
+          </div>
+
+          <label htmlFor="email1" for=" email1" class="block text-900 font-medium mb-2">Email <span
+              class="text-red-500">*</span></label>
+          <input id="email1" formControlName="userEmail" type="text" pInputText class="w-full mb-3">
+          <span class="text-red-500 ml-2" *ngIf="
+          registerReqDto.get('userEmail')!.invalid &&
+          !registerReqDto.get('userEmail')!.value &&
+          (registerReqDto.get('userEmail')!.dirty ||
+            registerReqDto.get('userEmail')!.touched)
+        ">Email Required</span>
+
+          <label for="password1" class="block text-900 font-medium mb-2">Password <span
+              class="text-red-500">*</span></label>
+          <p-password inputId="password1" formControlName="userPassword" inputStyleClass="w-full" styleClass="w-full"
+            [feedback]="false" [toggleMask]="true" styleClass="w-full mb-3"></p-password>
+          <span class="text-red-500 ml-2" *ngIf="
+            registerReqDto.get('userPassword')!.invalid &&
+            !registerReqDto.get('userPassword')!.value &&
+            (registerReqDto.get('userPassword')!.dirty ||
+              registerReqDto.get('userPassword')!.touched)
+          ">Password Required</span>
+
+          <label for="password2" class="block text-900 font-medium mb-2">Confirm Password <span
+              class="text-red-500">*</span></label>
+          <p-password inputId="password2" formControlName="userConfirmPassword" inputStyleClass="w-full"
+            styleClass="w-full" [feedback]="false" [toggleMask]="true"></p-password>
+          <span class="text-red-500 ml-2" *ngIf="
+            registerReqDto.get('userConfirmPassword')!.invalid &&
+            !registerReqDto.get('userConfirmPassword')!.value &&
+            (registerReqDto.get('userConfirmPassword')!.dirty ||
+              registerReqDto.get('userConfirmPassword')!.touched)
+          ">Confirm Password Required</span>
+
+          <span class="text-red-500 ml-2" *ngIf="checkPassword">Password must be the same</span>
+
+          <app-button [loading]="loading" backgroundColor="var(--PRIMARY)" type="submit"
+            (clickChange)="checkForm(registerReqDto)" classBtn="mt-5 w-full" label="Register Account"></app-button>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="col-12 md:col-7 pictureSide pt-8 pb-8">
+    <h2 class="text-center p-8 text-100">
+      <br><br><br>
+      <q>
+        The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty.
+      </q>
+      <br>
+      — Winston Churchill
+    </h2>
+  </div>
+
+
+</div>

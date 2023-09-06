@@ -1,0 +1,110 @@
+<p-card styleClass="mt-3" header="Job Detail">
+  <div class="grid ">
+    <img class="banner" [src]="imageUrlCompany |url" alt="company-logo">
+  </div>
+
+  <div class="grid">
+    <div class="col-12 mt-6">
+      <ng-container *ngIf="job?.fileId">
+        <p-image class="profile-picture" [src]="imageUrlBanner |url " imageClass="w-10rem h-8rem md:w-15rem md:h-15rem"
+          alt="Image">
+          <ng-template pTemplate="indicator">
+            <i class="pi pi-check"></i>
+          </ng-template>
+        </p-image>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <h2 class="title">{{job?.jobName}}</h2>
+      <h4><i class="pi pi-building"></i> {{job?.companyName}}</h4>
+      <h4><i class="pi pi-inbox"></i> Job Description : </h4>
+      <p class="subtitle has-text-black">
+        {{job?.description}}
+      </p>
+    </div>
+
+
+    <div class="col-12 md:col-6">
+      <div class="grid mt-2">
+        <div class="col-5"><i class="pi pi-home"></i> Address</div>
+        <div class="col-2">:</div>
+        <div class="col-5">{{job?.address}}</div>
+        <div class="col-5"><i class="pi pi-clock"></i> Open</div>
+        <div class="col-2">:</div>
+        <div class="col-5">{{job?.startDate}}</div>
+        <div class="col-5"><i class="pi pi-clock"></i> Close</div>
+        <div class="col-2">:</div>
+        <div class="col-5">{{job?.endDate}}</div>
+        <div class="col-5"><i class="pi pi-briefcase"></i> Job Type</div>
+        <div class="col-2">:</div>
+        <div class="col-5">{{job?.employementTypeName}}</div>
+        <div class="col-5"><i class="pi pi-money-bill"></i> Salary Range</div>
+        <div class="col-2">:</div>
+        <div class="col-5">{{job?.expectedSalaryMin}} - {{job?.expectedSalaryMax}}</div>
+      </div>
+    </div>
+  </div>
+
+</p-card>
+
+
+
+
+
+<div class=" mt-3 col-12 md:col-3 buttons">
+  <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/jobs"></app-button>
+  <app-button *ngIf="isOwner || checkRole()" type="button" label="Update" class="mr-2" classBtn="p-button-secondary"
+    link="/jobs/{{jobId}}">
+  </app-button>
+</div>
+<div class="col-12 md:col-9 title">
+  <h2>Applicant List</h2>
+</div>
+
+<div class="applicant-list">
+  <p-table #dt1 styleClass="p-datatable-sm" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']" [value]="applicant">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          No
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Applicant Code
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Applied Date
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Status
+          </div>
+        </th>
+        <th style="min-width:10rem">
+          <div class="flex align-items-center">
+            Candidate Name
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-a let-i="rowIndex">
+      <tr *ngIf="a.statusCode != reject && a.statusCode != hired" routerLink="/applicant/{{jobId}}/{{a.id}}"
+        class="cursor-pointer">
+        <td>{{ i+1 }}</td>
+        <td>{{a.applicantCode}}</td>
+        <td>{{a.appliedDate}}</td>
+        <td>{{a.statusName}}</td>
+        <td>{{a.candidateName}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

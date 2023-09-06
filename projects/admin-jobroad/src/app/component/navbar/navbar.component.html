@@ -1,0 +1,16 @@
+<div class="" style="width: 100%;">
+  <p-menubar [model]="items" styleClass="w-full" [style]="{'background-color' : 'var(--SECONDARY)'}">
+    <ng-template pTemplate="start">
+      <img src="../../../assets/jobroad.png" width="150" routerLink="/dashboard" class="mr-2 cursor-pointer"
+        alt="Jobroad Logo" />
+    </ng-template>
+    <ng-template pTemplate="end">
+      <p-overlayPanel #op>
+        <p-menu [model]="profile"> </p-menu>
+      </p-overlayPanel>
+      <p-avatar image="{{ imageUrl }}" styleClass="mr-2" size="large"
+        shape="circle" (click)="op.toggle($event)" alt="../../../assets/emptyProfile.jpeg">
+      </p-avatar>
+    </ng-template>
+  </p-menubar>
+</div>

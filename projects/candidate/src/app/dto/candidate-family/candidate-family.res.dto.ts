@@ -1,0 +1,10 @@
+export interface CandidateFamilyResDto {
+    id : string
+	fullname : string
+	relationship : string
+	degreeName : string
+	occupation : string
+	birthDate : string
+	birthPlace : string
+	candidateId : string
+}

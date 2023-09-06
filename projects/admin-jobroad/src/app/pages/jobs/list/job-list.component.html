@@ -1,0 +1,87 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <div class="grid mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>Job List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex justify-content-end">
+          <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/dashboard">
+          </app-button>
+          <app-button type="button" *ngIf="!isPic" backgroundColor="var(--PRIMARY)" iconBtn="pi pi-fw pi-plus" label="Add New Job"
+            classBtn="p-button-primary" link="/jobs/new"></app-button>
+        </div>
+
+        <div class="card col-12">
+          <p-table #dt1 styleClass="p-datatable-sm" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" selectionMode="single"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [value]="jobs">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  No
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Job Title
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Company Name
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Start Date
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    End Date
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Employment Type
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Min Salary
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Max Salary
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-j let-i="rowIndex">
+              <tr routerLink="/jobs/detail/{{j.id}}" class="cursor-pointer">
+                <td>{{ i+1 }}</td>
+                <td>{{j.jobName}}</td>
+                <td>{{j.companyName}}</td>
+                <td>{{j.startDate}}</td>
+                <td>{{j.endDate}}</td>
+                <td>{{j.employementTypeName}}</td>
+                <td>{{j.expectedSalaryMin}}</td>
+                <td>{{j.expectedSalaryMax}}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="8">No jobs found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>

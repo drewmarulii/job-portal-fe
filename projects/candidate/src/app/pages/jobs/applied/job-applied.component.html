@@ -1,0 +1,53 @@
+<div class="grid grid-nogutter p-2">
+  <h1>Applied Job(s)</h1>
+</div>
+
+<div class="flex justify-content-center mt-2">
+
+  <ng-container *ngIf="!check()">
+    <div class="grid grid-nogutter text-center">
+      <div class="col-12 md:col-12">
+        <h1>
+          You don't have any applied jobs, try to apply one
+        </h1>
+      </div>
+    </div>
+  </ng-container>
+
+
+
+
+  <ng-container *ngIf="check()" class="col-12 md:col-10">
+
+    <div class="card">
+      <p-card *ngFor="let a of appliedJob" class="p-2">
+        <div class="grid">
+          <div class="col-12 md:col-2 text-center">
+            <p-image [src]=" a.companyPhotoId | url" [preview]="true" alt="Image" width="100">
+              <ng-template pTemplate="indicator">
+                <i class="pi pi-check"></i>
+              </ng-template>
+            </p-image>
+          </div>
+
+          <div class="col-12 md:col-4">
+            <div class="col-12">
+              <span style="font-size: 1.75rem; font-weight: bold;"> {{a.jobName}}</span>
+            </div>
+            <div class="col-12">
+              <span style="font-size: 1rem; font-weight: bold;"> {{a.companyName}}</span>
+            </div>
+          </div>
+          <div class="col-12 md:col-4">
+            <div class="col-12">
+              <p-badge [value]="a.statusName" size="large" [severity]="checker(a.statusName)"></p-badge>
+              <p>{{a.appliedDate}}</p>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+  </ng-container>
+</div>
+<p-scrollTop icon="pi pi-arrow-up"></p-scrollTop>

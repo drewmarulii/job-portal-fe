@@ -1,0 +1,1412 @@
+<div class="col-12">
+  <div class="flex justify-content-between flex-wrap card-container mb-3">
+    <div class="flex align-items-center justify-content-center">
+      <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/candidates/profile">
+      </app-button>
+    </div>
+  </div>
+  <!-- Candidate Info -->
+  <p-card header="Update Candidate Information">
+    <form [formGroup]="candidateUpdateInsertReqDto" (ngSubmit)="onUpdate()">
+      <div class="grid">
+        <div class="col-12 md:col-10 md:col-offset-2">
+          <div class="row align-items-center">
+            <div class="grid">
+              <div class="col-12 md:col-12">
+                <div class="flex justify-content-end flex-wrap card-container">
+                  <div class="flex align-items-right justify-content-center">
+                    <app-button backgroundColor="secondary" label="Cancel" class="mr-2" classBtn="p-button-secondary"
+                      link="/candidates/profile"></app-button>
+                    <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Save"
+                      class="mr-2" iconBtn="pi pi-save" (clickChange)="checkForm(candidateUpdateInsertReqDto)">
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12 md:col-2">
+          <p-image [src]="imageUrl" alt="Image" width="100%" height="250px"></p-image>
+          <p-fileUpload mode="basic" styleClass="bg-green-700" chooseLabel="Change Picture" chooseIcon="pi pi-upload"
+            class="form-control" (onSelect)="fileUpload($event, file)" #file type="file" id="picture" required
+            [style]="{'width':'100%'}"></p-fileUpload>
+        </div>
+
+
+        <div class="col-12 md:col-5">
+          <div>
+            <div class="grid">
+              <label class="col-4">Email</label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                {{ candidateUser?.candidateUser?.userEmail }}
+              </div>
+            </div>
+          </div>
+          <div formGroupName="profile">
+            <div class="grid">
+
+              <label for="salute" class="col-4">Salutation<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <p-dropdown inputId="salute" [options]="salutations" optionLabel="label" optionValue="value"
+                  [showClear]="true" [required]="true" formControlName="salutation" placeholder="Choose Salutation"
+                  autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.salutation')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.salutation')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.salutation')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.salutation')!.touched)
+                ">Must be selected</span>
+              </div>
+              <label for="fullName" class="col-4">Full Name<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <input pInputText id="fullName" required type="text" formControlName="fullname"
+                  [style]="{'width':'100%'}" />
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.fullname')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.fullname')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.fullname')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.fullname')!.touched)
+                ">Input can't be empty</span>
+              </div>
+              <label for="gender" class="col-4">Gender<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <p-dropdown inputId="gender" [options]="genders" optionLabel="label" optionValue="value"
+                  [showClear]="true" [required]="true" formControlName="gender" placeholder="Choose Gender"
+                  [style]="{'width':'100%'}"></p-dropdown>
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.gender')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.gender')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.gender')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.gender')!.touched)
+                ">Must be selected</span>
+              </div>
+              <label for="birthPlace" class="col-4">Birth Place<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <input pInputText id="birthPlace" required type="text" formControlName="birthPlace"
+                  [style]="{'width':'100%'}" />
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.birthPlace')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.birthPlace')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.birthPlace')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.birthPlace')!.touched)
+                ">Input can't be empty</span>
+              </div>
+              <label for="birthDate" class="col-4">Birth Date<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <p-calendar inputId="birthDate" [required]="true" formControlName="birthDateTemp" [showIcon]="true"
+                  dateFormat="dd/mm/yy" inputStyleClass="w-full" styleClass="w-full" [defaultDate]="birthDateCandidate">
+                </p-calendar>
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.birthDateTemp')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.birthDateTemp')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.birthDateTemp')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.birthDateTemp')!.touched)
+                ">Input can't be empty</span>
+              </div>
+              <label for="marital" class="col-4">Marital Status<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <p-dropdown [options]="maritals" optionLabel="maritalName" optionValue="id" [showClear]="true"
+                  [required]="true" formControlName="maritalStatusId" placeholder="Choose Marital"
+                  [style]="{'width':'100%'}"></p-dropdown>
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.maritalStatusId')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.maritalStatusId')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.maritalStatusId')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.maritalStatusId')!.touched)
+                ">Must be selected</span>
+              </div>
+              <label for="password1" class="col-4">Religion<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                <p-dropdown [options]="religions" optionLabel="religionName" optionValue="id" [showClear]="true"
+                  [required]="true" formControlName="religionId" placeholder="Choose Religion"
+                  [style]="{'width':'100%'}"></p-dropdown>
+                <span class="text-red-500 ml-2" *ngIf="
+                  candidateUpdateInsertReqDto.get('profile.religionId')!.invalid &&
+                  !candidateUpdateInsertReqDto.get('profile.religionId')!.value &&
+                  (candidateUpdateInsertReqDto.get('profile.religionId')!.dirty ||
+                    candidateUpdateInsertReqDto.get('profile.religionId')!.touched)
+                ">Must be selected</span>
+              </div>
+              <label for="password1" class="col-4">Status<span class="text-red-500"> *</span></label>
+              <div class="col-1">:</div>
+              <div class="col-7">
+                {{ candidateUser?.candidateProfile?.candidateStatus }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-5" formGroupName="profile">
+          <div class="grid">
+            <label for="nik" class="col-4">NIK<span class="text-red-500"> *</span></label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              <input pInputText id="nik" required type="text" formControlName="nik" [style]="{'width':'100%'}" />
+              <span class="text-red-500 ml-2" *ngIf="
+              candidateUpdateInsertReqDto.get('profile.nik')!.invalid &&
+              !candidateUpdateInsertReqDto.get('profile.nik')!.value &&
+              (candidateUpdateInsertReqDto.get('profile.nik')!.dirty ||
+                candidateUpdateInsertReqDto.get('profile.nik')!.touched)
+            ">Input can't be empty</span>
+            </div>
+            <label for="phone" class="col-4">Phone Number</label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              <input pInputText id="phone" type="text" formControlName="phoneNumber" [style]="{'width':'100%'}" />
+
+            </div>
+            <label for="mobile" class="col-4">Mobile Number<span class="text-red-500"> *</span></label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              <input pInputText id="mobile" required type="text" formControlName="mobileNumber"
+                [style]="{'width':'100%'}" />
+              <span class="text-red-500 ml-2" *ngIf="
+                candidateUpdateInsertReqDto.get('profile.mobileNumber')!.invalid &&
+                !candidateUpdateInsertReqDto.get('profile.mobileNumber')!.value &&
+                (candidateUpdateInsertReqDto.get('profile.mobileNumber')!.dirty ||
+                  candidateUpdateInsertReqDto.get('profile.mobileNumber')!.touched)
+              ">Input can't be empty</span>
+            </div>
+            <label for="experience" class="col-4">Experiences (years)<span class="text-red-500"> *</span></label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              <p-inputNumber inputId="experience" inputId="minmax" mode="decimal" [min]="0" [max]="120"
+                formControlName="experience" autoWidth="false" inputStyleClass="w-full" class="w-full"
+                [style]="{'width':'100%'}"></p-inputNumber>
+              <span class="text-red-500 ml-2" *ngIf="
+                candidateUpdateInsertReqDto.get('profile.experience')!.invalid &&
+                !candidateUpdateInsertReqDto.get('profile.experience')!.value &&
+                (candidateUpdateInsertReqDto.get('profile.experience')!.dirty ||
+                  candidateUpdateInsertReqDto.get('profile.experience')!.touched)
+              ">Input can't be empty</span>
+            </div>
+            <label for="expectedSalary" class="col-4">Expected Salary<span class="text-red-500"> *</span></label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              <p-inputNumber inputId="expectedSalary" mode="currency" currency="IDR" locale="id-ID"
+                formControlName="expectedSalary" inputStyleClass="w-full" class="w-full" [style]="{'width':'100%'}"
+                placeholder="Rp 0,00"></p-inputNumber>
+              <span class="text-red-500 ml-2" *ngIf="
+                candidateUpdateInsertReqDto.get('profile.expectedSalary')!.invalid &&
+                !candidateUpdateInsertReqDto.get('profile.expectedSalary')!.value &&
+                (candidateUpdateInsertReqDto.get('profile.expectedSalary')!.dirty ||
+                  candidateUpdateInsertReqDto.get('profile.expectedSalary')!.touched)
+              ">Input can't be empty</span>
+            </div>
+            <label for="password1" class="col-4">Person Type<span class="text-red-500"> *</span></label>
+            <div class="col-1">:</div>
+            <div class="col-7">
+              {{ candidateUser?.candidateProfile?.personType }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="flex justify-content-between flex-wrap card-container purple-container">
+            <div class="flex align-items-center justify-content-center">
+              <h3 class="col-12">Addresses</h3>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+              <app-button typeBtn="button" (clickChange)="showAddAddress()" iconBtn="pi pi-plus-circle"
+                backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+            </div>
+          </div>
+          <hr>
+          <div class="card">
+            <p-dataView #dv [value]="candidateAddresses">
+              <ng-template let-address pTemplate="listItem" let-i="rowIndex">
+                <div class="col-12">
+                  <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                      <div class="flex flex-column align-items-center sm:align-items-start">
+                        <div class="text-2xl font-bold text-900">{{ address.residenceType }}
+                        </div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-2">
+                            <span class="font-semibold">{{ address.address }} {{
+                              address.city }}, {{
+                              address.province }}, {{ address.country }} {{
+                              address.postalCode }}</span>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-l font-semibold"></span>
+                        <app-button typeBtn="button" (clickChange)="showDeleteAddress(address.id)" iconBtn="pi pi-trash"
+                          backgroundColor="danger" classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger">
+                        </app-button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="flex justify-content-between flex-wrap card-container purple-container">
+            <div class="flex align-items-center justify-content-center">
+              <h3 class="col-12">Educations</h3>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+              <app-button typeBtn="button" (clickChange)="showAddEducation()" iconBtn="pi pi-plus-circle"
+                backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+            </div>
+          </div>
+          <hr>
+          <div class="card">
+            <p-dataView #dv [value]="candidateEducations">
+              <ng-template let-education pTemplate="listItem" let-i="rowIndex">
+                <div class="col-12">
+                  <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                      <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                        <div class="text-2xl font-bold text-900">{{ education.instituitionName
+                          }}</div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-2">
+                            <span class="font-semibold">{{ education.degreeName }} | {{
+                              education.majors }}</span>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-l font-semibold">{{ education.startYear }} - {{ education.endYear }}</span>
+                        <app-button typeBtn="button" (clickChange)="showDeleteEducation(education.id)"
+                          iconBtn="pi pi-trash" backgroundColor="danger"
+                          classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="flex justify-content-between flex-wrap card-container purple-container">
+            <div class="flex align-items-center justify-content-center">
+              <h3 class="col-12">Working Experiences</h3>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+              <app-button typeBtn="button" (clickChange)="showAddWorking()" iconBtn="pi pi-plus-circle"
+                backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+            </div>
+          </div>
+          <hr>
+          <div class="card">
+            <p-dataView #dv [value]="candidateWorks">
+              <ng-template let-working pTemplate="listItem" let-i="rowIndex">
+                <div class="col-12">
+                  <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                      <div class="flex flex-column align-items-center sm:align-items-start">
+                        <div class="text-2xl font-bold text-900">{{ working.positionName }}
+                        </div>
+                        <div class="flex align-items-center">
+                          <span class="flex align-items-center">
+                            <span class="font-semibold">{{ working.companyName }}</span>
+                          </span>
+                        </div>
+
+                        <div class="mt-3"><strong>Responsibility:</strong> {{
+                          working.responsibility }}</div>
+                        <div class="mt-1"><strong>Last Salary:</strong> {{ working.lastSalary }}
+                        </div>
+                        <div class="mt-1"><strong>Reasons Leave:</strong> {{ working.reasonLeave
+                          }}</div>
+                      </div>
+                      <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-l font-semibold">{{ working.startDate }} - {{
+                          working.endDate }}</span>
+                        <app-button typeBtn="button" (clickChange)="showDeleteWorking(working.id)" iconBtn="pi pi-trash"
+                          backgroundColor="danger" classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger">
+                        </app-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="flex justify-content-between flex-wrap card-container purple-container">
+            <div class="flex align-items-center justify-content-center">
+              <h3 class="col-12">Training Experiences</h3>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+              <app-button typeBtn="button" (clickChange)="showAddTraining()" iconBtn="pi pi-plus-circle"
+                backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+            </div>
+          </div>
+          <hr>
+          <div class="card">
+            <p-dataView #dv [value]="candidateTrainings">
+              <ng-template let-training pTemplate="listItem" let-i="rowIndex">
+                <div class="col-12">
+                  <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                      <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                        <div class="text-2xl font-bold text-900">{{ training.trainingName }}
+                        </div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-2">
+                            <span class="font-semibold">{{ training.organizationName
+                              }}</span>
+                          </span>
+                        </div>
+                        <div>{{ training.description }}</div>
+                      </div>
+                      <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-l font-semibold">{{ training.startDate }} - {{
+                          training.endDate }}</span>
+                        <app-button typeBtn="button" (clickChange)="showDeleteTraining(training.id)"
+                          iconBtn="pi pi-trash" backgroundColor="danger"
+                          classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="flex justify-content-between flex-wrap card-container purple-container">
+            <div class="flex align-items-center justify-content-center">
+              <h3 class="col-12">Project Experiences</h3>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+              <app-button typeBtn="button" (clickChange)="showAddProject()" iconBtn="pi pi-plus-circle"
+                backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+            </div>
+          </div>
+          <hr>
+          <div class="card">
+            <p-dataView #dv [value]="candidateProjects">
+              <ng-template let-project pTemplate="listItem" let-i="rowIndex">
+                <div class="col-12">
+                  <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                      <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                        <div class="text-2xl font-bold text-900">{{ project.projectName }}
+                        </div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-2">
+                            <span class="font-semibold"><a href="http://github.com" target="_blank">{{
+                                project.projectUrl }}</a></span>
+                          </span>
+                        </div>
+                        <div>{{ project.description }}</div>
+                      </div>
+                      <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                        <span class="text-l font-semibold">{{ project.startDate }} - {{
+                          project.endDate }}</span>
+                        <app-button typeBtn="button" (clickChange)="showDeleteProject(project.id)" iconBtn="pi pi-trash"
+                          backgroundColor="danger" classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger">
+                        </app-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="row align-items-center">
+            <div class="grid">
+              <div class="col-12 md:col-6">
+                <div class="flex justify-content-between flex-wrap card-container purple-container">
+                  <div class="flex align-items-center justify-content-center">
+                    <h3 class="col-12">Skills</h3>
+                  </div>
+                  <div class="flex align-items-center justify-content-center">
+                    <app-button typeBtn="button" (clickChange)="showAddSkill()" iconBtn="pi pi-plus-circle"
+                      backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+                  </div>
+                </div>
+                <hr>
+                <div class="card">
+                  <p-dataView #dv [value]="candidateSkills">
+                    <ng-template let-skill pTemplate="listItem" let-i="rowIndex">
+                      <div class="col-12">
+                        <div class="flex flex-column xl:flex-row xl:align-items-start pl-4 gap-4">
+                          <div
+                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                              <div class="flex align-items-center gap-3 mt-3">
+                                <span class="flex align-items-center gap-2 mb-3">
+                                  <span class="font-semibold">{{ skill.skillName
+                                    }}</span>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                              <app-button typeBtn="button" (clickChange)="showDeleteSkill(skill.id)"
+                                iconBtn="pi pi-trash" backgroundColor="danger"
+                                classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </p-dataView>
+                </div>
+              </div>
+
+              <div class="col-12 md:col-6">
+                <div class="flex justify-content-between flex-wrap card-container purple-container">
+                  <div class="flex align-items-center justify-content-center">
+                    <h3 class="col-12">Languages</h3>
+                  </div>
+                  <div class="flex align-items-center justify-content-center">
+                    <app-button typeBtn="button" (clickChange)="showAddLanguage()" iconBtn="pi pi-plus-circle"
+                      backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+                  </div>
+                </div>
+                <hr>
+                <div class="card">
+                  <p-dataView #dv [value]="candidateLanguages">
+                    <ng-template let-language pTemplate="listItem" let-i="rowIndex">
+                      <div class="col-12">
+                        <div class="flex flex-column xl:flex-row xl:align-items-start pl-4 gap-4">
+                          <div
+                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                              <div class="flex align-items-center gap-3 mt-3">
+                                <span class="flex align-items-center gap-2">
+                                  <span class="font-semibold">{{ language.languageName
+                                    }}</span>
+                                </span>
+                              </div>
+                              <div class="flex align-items-center gap-3 mb-2">
+                                <span class="flex align-items-center gap-2">
+                                  <span>Writing : {{ language.writingRate }}/5</span>
+                                  <span>Speaking : {{ language.speakingRate
+                                    }}/5</span>
+                                  <span>Listening : {{ language.listeningRate
+                                    }}/5</span>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="flex sm:flex-column align-items-center sm:align-items-end">
+                              <app-button typeBtn="button" (clickChange)="showDeleteLanguage(language.id)"
+                                iconBtn="pi pi-trash" backgroundColor="danger"
+                                classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </p-dataView>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="row align-items-center">
+            <div class="grid">
+              <div class="col-12 md:col-12">
+                <div class="flex justify-content-between flex-wrap card-container">
+                  <div class="flex align-items-center justify-content-center">
+                    <h3 class="col-12">Family Member</h3>
+                  </div>
+                  <div class="flex align-items-center justify-content-center">
+                    <app-button typeBtn="button" (clickChange)="showAddFamily()" iconBtn="pi pi-plus-circle"
+                      backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="col-12 md:col-12">
+                <p-table [value]="candidateFamilies" [tableStyle]="{ 'min-width': '50rem' }">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>No.</th>
+                      <th>Full Name</th>
+                      <th>Relationship</th>
+                      <th>Degree</th>
+                      <th>Occupation</th>
+                      <th>Birth</th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-family let-i="rowIndex">
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ family.fullname }}</td>
+                      <td>{{ family.relationship }}</td>
+                      <td>{{ family.degreeName }}</td>
+                      <td>{{ family.occupation }}</td>
+                      <td>{{ family.birthPlace }}, {{ family.birthDate }}</td>
+                      <td>
+                        <app-button typeBtn="button" (clickChange)="showDeleteFamily(family.id)" iconBtn="pi pi-trash"
+                          backgroundColor="danger" classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger">
+                        </app-button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="row align-items-center">
+            <div class="grid">
+              <div class="col-12 md:col-12">
+                <div class="flex justify-content-between flex-wrap card-container">
+                  <div class="flex align-items-center justify-content-center">
+                    <h3 class="col-12">References</h3>
+                  </div>
+                  <div class="flex align-items-center justify-content-center">
+                    <app-button typeBtn="button" (clickChange)="showAddReference()" iconBtn="pi pi-plus-circle"
+                      backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="col-12 md:col-12">
+                <p-table [value]="candidateReferences" [tableStyle]="{'min-width': '60rem'}">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>No.</th>
+                      <th>Name</th>
+                      <th>Relationship</th>
+                      <th>Occupation</th>
+                      <th>Phone</th>
+                      <th>Company</th>
+                      <th>Description</th>
+                      <th>Email</th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-reference let-i="rowIndex">
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ reference.fullname }}</td>
+                      <td>{{ reference.relationship }}</td>
+                      <td>{{ reference.occupation }}</td>
+                      <td>{{ reference.phoneNumber }}</td>
+                      <td>{{ reference.company }}</td>
+                      <td>{{ reference.description }}</td>
+                      <td>{{ reference.email }}</td>
+                      <td>
+                        <app-button typeBtn="button" (clickChange)="showDeleteReference(reference.id)"
+                          iconBtn="pi pi-trash" backgroundColor="danger"
+                          classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-8 md:col-offset-2">
+          <div class="row align-items-center">
+            <div class="grid">
+              <div class="col-12 md:col-12">
+                <div class="flex justify-content-between flex-wrap card-container">
+                  <div class="flex align-items-center justify-content-center">
+                    <h3 class="col-12">Documents</h3>
+                  </div>
+                  <div class="flex align-items-center justify-content-center">
+                    <app-button typeBtn="button" (clickChange)="showAddDocuments()" iconBtn="pi pi-plus-circle"
+                      backgroundColor="var(--PRIMARY)" label="ADD"></app-button>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="col-12 md:col-12">
+                <p-table [value]="candidateDocuments">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>No.</th>
+                      <th>Document Name</th>
+                      <th>Document Type</th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-document let-i="rowIndex">
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ document.docName }}.{{ document.fileExtension}}</td>
+                      <td>{{ document.fileTypeName }}</td>
+                      <td>
+                        <app-button typeBtn="button" (clickChange)="showDeleteDocument(document.id)"
+                          iconBtn="pi pi-trash" backgroundColor="danger"
+                          classBtn="md:align-self-end mb-2 p-button-rounded p-button-danger"></app-button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<!-- Dialog Add Address -->
+<p-dialog header="Add Address" [modal]="true" [(visible)]="dialogAddress" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="addressInsertReqDto" (ngSubmit)="onAddAddress()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="residence">Residence Type <span class="text-red-500"> *</span> </label>
+        <p-dropdown inputId="residence" [options]="residenceType" optionLabel="label" optionValue="value"
+          [showClear]="true" [required]="true" formControlName="residenceType" placeholder="Choose Residence Type">
+        </p-dropdown>
+        <span class="text-red-500 ml-2" *ngIf="
+            addressInsertReqDto.get('residenceType')!.invalid &&
+            !addressInsertReqDto.get('residenceType')!.value &&
+            (addressInsertReqDto.get('residenceType')!.dirty ||
+              addressInsertReqDto.get('residenceType')!.touched)
+          ">Must be selected</span>
+      </div>
+      <div class="field col-12">
+        <label for="address">Address <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="address" required rows="1" cols="50" formControlName="address"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        addressInsertReqDto.get('address')!.invalid &&
+        !addressInsertReqDto.get('address')!.value &&
+        (addressInsertReqDto.get('address')!.dirty ||
+          addressInsertReqDto.get('address')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="country">Country <span class="text-red-500"> *</span> </label>
+        <input pInputText id="country" required type="text" formControlName="country" />
+        <span class="text-red-500 ml-2" *ngIf="
+            addressInsertReqDto.get('country')!.invalid &&
+            !addressInsertReqDto.get('country')!.value &&
+            (addressInsertReqDto.get('country')!.dirty ||
+              addressInsertReqDto.get('country')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="province">Province <span class="text-red-500"> *</span> </label>
+        <input pInputText id="province" required type="text" formControlName="province" />
+        <span class="text-red-500 ml-2" *ngIf="
+            addressInsertReqDto.get('province')!.invalid &&
+            !addressInsertReqDto.get('province')!.value &&
+            (addressInsertReqDto.get('province')!.dirty ||
+              addressInsertReqDto.get('province')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="city">City <span class="text-red-500"> *</span> </label>
+        <input pInputText id="city" required type="text" formControlName="city" />
+        <span class="text-red-500 ml-2" *ngIf="
+            addressInsertReqDto.get('city')!.invalid &&
+            !addressInsertReqDto.get('city')!.value &&
+            (addressInsertReqDto.get('city')!.dirty ||
+              addressInsertReqDto.get('city')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="postal">Postal Code <span class="text-red-500"> *</span> </label>
+        <input pInputText id="postal" required type="text" formControlName="postalCode" />
+        <span class="text-red-500 ml-2" *ngIf="
+            addressInsertReqDto.get('postalCode')!.invalid &&
+            !addressInsertReqDto.get('postalCode')!.value &&
+            (addressInsertReqDto.get('postalCode')!.dirty ||
+              addressInsertReqDto.get('postalCode')!.touched)
+          ">Input can't be empty</span>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Save" class=" mr-2"
+        (clickChange)="checkForm(addressInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Education -->
+<p-dialog header="Add Education" [modal]="true" [(visible)]="dialogEducation" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="educationInsertReqDto" (ngSubmit)="onAddEducation()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="institution">Institution Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="institution" required type="text" formControlName="instituitionName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        educationInsertReqDto.get('instituitionName')!.invalid &&
+        !educationInsertReqDto.get('instituitionName')!.value &&
+        (educationInsertReqDto.get('instituitionName')!.dirty ||
+          educationInsertReqDto.get('instituitionName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="degree">Degree<span class="text-red-500"> *</span> </label>
+        <p-dropdown inputId="degree" [options]="degrees" optionLabel="label" optionValue="value" [showClear]="true"
+          [required]="true" formControlName="degreeName" placeholder="Choose Degree"></p-dropdown>
+        <span class="text-red-500 ml-2" *ngIf="
+          educationInsertReqDto.get('degreeName')!.invalid &&
+          !educationInsertReqDto.get('degreeName')!.value &&
+          (educationInsertReqDto.get('degreeName')!.dirty ||
+            educationInsertReqDto.get('degreeName')!.touched)
+        ">Must be selected</span>
+      </div>
+      <div class="field col-12">
+        <label for="major">Major <span class="text-red-500"> *</span> </label>
+        <input pInputText id="major" required type="text" formControlName="majors" />
+        <span class="text-red-500 ml-2" *ngIf="
+        educationInsertReqDto.get('majors')!.invalid &&
+        !educationInsertReqDto.get('majors')!.value &&
+        (educationInsertReqDto.get('majors')!.dirty ||
+          educationInsertReqDto.get('majors')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+
+        <label for="cgpa">CGPA <span class="text-red-500"> *</span> </label>
+        <p-inputNumber inputId="cgpa" inputId="minmax" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+          [min]="0" [max]="4" formControlName="cgpa"></p-inputNumber>
+        <span class="text-red-500 ml-2" *ngIf="
+          educationInsertReqDto.get('cgpa')!.invalid &&
+          !educationInsertReqDto.get('cgpa')!.value &&
+          (educationInsertReqDto.get('cgpa')!.dirty ||
+            educationInsertReqDto.get('cgpa')!.touched)
+        ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="startyear">Start Year <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="startyear" dateFormat="dd/mm/yy" [required]="true" [inline]="true"
+          formControlName="startYearTemp" [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field col-12">
+
+        <label for="endyear">End Year <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="endyear" dateFormat="dd/mm/yy" [required]="true" [inline]="true"
+          formControlName="endYearTemp" [showIcon]="true"></p-calendar>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Save" class=" mr-2"
+        (clickChange)="checkForm(educationInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Family Member -->
+<p-dialog header="Add Family Member" [modal]="true" [(visible)]="dialogFamily" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="familyInsertReqDto" (ngSubmit)="onAddFamily()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="fullname">Full Name<span class="text-red-500"> *</span> </label>
+        <input pInputText id="fullName" required type="text" formControlName="fullname" />
+        <span class="text-red-500 ml-2" *ngIf="
+            familyInsertReqDto.get('fullname')!.invalid &&
+            !familyInsertReqDto.get('fullname')!.value &&
+            (familyInsertReqDto.get('fullname')!.dirty ||
+              familyInsertReqDto.get('fullname')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="relationship">Relationship <span class="text-red-500"> *</span> </label>
+        <input pInputText id="relationship" required type="text" formControlName="relationship" />
+        <span class="text-red-500 ml-2" *ngIf="
+            familyInsertReqDto.get('relationship')!.invalid &&
+            !familyInsertReqDto.get('relationship')!.value &&
+            (familyInsertReqDto.get('relationship')!.dirty ||
+              familyInsertReqDto.get('relationship')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="degreeName">Degree <span class="text-red-500"> *</span> </label>
+        <p-dropdown [options]="degrees" optionLabel="label" optionValue="value" [showClear]="true" [required]="true"
+          formControlName="degreeName" placeholder="Choose Degree"></p-dropdown>
+      </div>
+      <div class="field col-12">
+        <label for="occupation">Occupation <span class="text-red-500"> *</span> </label>
+        <input pInputText id="occupation" required type="text" formControlName="occupation" />
+        <span class="text-red-500 ml-2" *ngIf="
+            familyInsertReqDto.get('occupation')!.invalid &&
+            !familyInsertReqDto.get('occupation')!.value &&
+            (familyInsertReqDto.get('occupation')!.dirty ||
+              familyInsertReqDto.get('occupation')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="birthPlace">Birth Place <span class="text-red-500"> *</span> </label>
+        <input pInputText id="birthplace" required type="text" formControlName="birthPlace" />
+        <span class="text-red-500 ml-2" *ngIf="
+            familyInsertReqDto.get('birthPlace')!.invalid &&
+            !familyInsertReqDto.get('birthPlace')!.value &&
+            (familyInsertReqDto.get('birthPlace')!.dirty ||
+              familyInsertReqDto.get('birthPlace')!.touched)
+          ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="birthDateFamily">Birth Date <span class="text-red-500"> *</span></label>
+        <p-calendar inputId="birthDateFamily" [required]="true" formControlName="birthDateTemp" dateFormat="dd/mm/yy"
+          [inline]="true"></p-calendar>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(familyInsertReqDto)" [isDisabled]="familyInsertReqDto.invalid"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Skill -->
+<p-dialog header="Add Skill" [modal]="true" [(visible)]="dialogSkill" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="skillInsertReqDto" (ngSubmit)="onAddSkill()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="skillname">Skill Name<span class="text-red-500"> *</span> </label>
+        <input pInputText id="skillname" required type="text" formControlName="skillName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        skillInsertReqDto.get('skillName')!.invalid &&
+        !skillInsertReqDto.get('skillName')!.value &&
+        (skillInsertReqDto.get('skillName')!.dirty ||
+          skillInsertReqDto.get('skillName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(skillInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Language -->
+<p-dialog header="Add Language" [modal]="true" [(visible)]="dialogLanguage" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="languageInsertReqDto" (ngSubmit)="onAddLanguage()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="language">Language <span class="text-red-500"> *</span> </label>
+        <input pInputText id="language" required type="text" formControlName="languageName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        languageInsertReqDto.get('languageName')!.invalid &&
+        !languageInsertReqDto.get('languageName')!.value &&
+        (languageInsertReqDto.get('languageName')!.dirty ||
+          languageInsertReqDto.get('languageName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="writing">Writing Rate (0-5)<span class="text-red-500"> *</span> </label>
+        <p-inputNumber inputId="writing" mode="decimal" [min]="0" [max]="5" formControlName="writingRate">
+        </p-inputNumber>
+        <span class="text-red-500 ml-2" *ngIf="
+          languageInsertReqDto.get('writingRate')!.invalid &&
+          !languageInsertReqDto.get('writingRate')!.value &&
+          (languageInsertReqDto.get('writingRate')!.dirty ||
+            languageInsertReqDto.get('writingRate')!.touched)
+        ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="speaking">Speaking Rate (0-5)<span class="text-red-500"> *</span> </label>
+        <p-inputNumber inputId="speaking" mode="decimal" [min]="0" [max]="5" formControlName="speakingRate">
+        </p-inputNumber>
+        <span class="text-red-500 ml-2" *ngIf="
+          languageInsertReqDto.get('speakingRate')!.invalid &&
+          !languageInsertReqDto.get('speakingRate')!.value &&
+          (languageInsertReqDto.get('speakingRate')!.dirty ||
+            languageInsertReqDto.get('speakingRate')!.touched)
+        ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="listening">Listening Rate (0-5)<span class="text-red-500"> *</span> </label>
+        <p-inputNumber inputId="listening" mode="decimal" [min]="0" [max]="5" formControlName="listeningRate">
+        </p-inputNumber>
+        <span class="text-red-500 ml-2" *ngIf="
+          languageInsertReqDto.get('listeningRate')!.invalid &&
+          !languageInsertReqDto.get('listeningRate')!.value &&
+          (languageInsertReqDto.get('listeningRate')!.dirty ||
+            languageInsertReqDto.get('listeningRate')!.touched)
+        ">Input can't be empty</span>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(languageInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Reference -->
+<p-dialog header="Add Reference" [modal]="true" [(visible)]="dialogReference" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="referenceInsertReqDto" (ngSubmit)="onAddReference()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="fullname">Fullname <span class="text-red-500"> *</span> </label>
+        <input pInputText id="fullname" required type="text" formControlName="fullname" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('fullname')!.invalid &&
+        !referenceInsertReqDto.get('fullname')!.value &&
+        (referenceInsertReqDto.get('fullname')!.dirty ||
+          referenceInsertReqDto.get('fullname')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="relationship">Relationship <span class="text-red-500"> *</span> </label>
+        <input pInputText id="relationship" required type="text" formControlName="relationship" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('relationship')!.invalid &&
+        !referenceInsertReqDto.get('relationship')!.value &&
+        (referenceInsertReqDto.get('relationship')!.dirty ||
+          referenceInsertReqDto.get('relationship')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="occupation">Ocupation <span class="text-red-500"> *</span> </label>
+        <input pInputText id="occupation" required type="text" formControlName="occupation" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('occupation')!.invalid &&
+        !referenceInsertReqDto.get('occupation')!.value &&
+        (referenceInsertReqDto.get('occupation')!.dirty ||
+          referenceInsertReqDto.get('occupation')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="phone">Phone Number <span class="text-red-500"> *</span> </label>
+        <input pInputText id="phone" required type="text" formControlName="phoneNumber" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('phoneNumber')!.invalid &&
+        !referenceInsertReqDto.get('phoneNumber')!.value &&
+        (referenceInsertReqDto.get('phoneNumber')!.dirty ||
+          referenceInsertReqDto.get('phoneNumber')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="email">Email <span class="text-red-500"> *</span> </label>
+        <input pInputText id="email" required type="email" formControlName="email" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('email')!.invalid &&
+        !referenceInsertReqDto.get('email')!.value &&
+        (referenceInsertReqDto.get('email')!.dirty ||
+          referenceInsertReqDto.get('email')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="company">Company <span class="text-red-500"> *</span> </label>
+        <input pInputText id="company" required type="text" formControlName="company" />
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('company')!.invalid &&
+        !referenceInsertReqDto.get('company')!.value &&
+        (referenceInsertReqDto.get('company')!.dirty ||
+          referenceInsertReqDto.get('company')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="description">Description <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="description" required rows="1" cols="50" formControlName="description"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        referenceInsertReqDto.get('description')!.invalid &&
+        !referenceInsertReqDto.get('description')!.value &&
+        (referenceInsertReqDto.get('description')!.dirty ||
+          referenceInsertReqDto.get('description')!.touched)
+      ">Input can't be empty</span>
+      </div>
+
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(referenceInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Working -->
+<p-dialog header="Add Working" [modal]="true" [(visible)]="dialogWorking" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="workingInsertReqDto" (ngSubmit)="onAddWorking()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="position">Position Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="position" required type="text" formControlName="positionName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        workingInsertReqDto.get('positionName')!.invalid &&
+        !workingInsertReqDto.get('positionName')!.value &&
+        (workingInsertReqDto.get('positionName')!.dirty ||
+          workingInsertReqDto.get('positionName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="company">Company <span class="text-red-500"> *</span> </label>
+        <input pInputText id="company" required type="text" formControlName="companyName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        workingInsertReqDto.get('companyName')!.invalid &&
+        !workingInsertReqDto.get('companyName')!.value &&
+        (workingInsertReqDto.get('companyName')!.dirty ||
+          workingInsertReqDto.get('companyName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="address">Address <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="address" required rows="1" cols="50" formControlName="address"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        workingInsertReqDto.get('address')!.invalid &&
+        !workingInsertReqDto.get('address')!.value &&
+        (workingInsertReqDto.get('address')!.dirty ||
+          workingInsertReqDto.get('address')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="responsibility">Responsibility <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="responsibility" required rows="1" cols="50"
+          formControlName="responsibility"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+          workingInsertReqDto.get('responsibility')!.invalid &&
+          !workingInsertReqDto.get('responsibility')!.value &&
+          (workingInsertReqDto.get('responsibility')!.dirty ||
+            workingInsertReqDto.get('responsibility')!.touched)
+        ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="reason">Reason Leave <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="reason" required rows="1" cols="50" formControlName="reasonLeave"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        workingInsertReqDto.get('reasonLeave')!.invalid &&
+        !workingInsertReqDto.get('reasonLeave')!.value &&
+        (workingInsertReqDto.get('reasonLeave')!.dirty ||
+          workingInsertReqDto.get('reasonLeave')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="lastsalary">Last Salary <span class="text-red-500"> *</span> </label>
+        <p-inputNumber inputId="lastSalary" mode="currency" currency="IDR" locale="id-ID" formControlName="lastSalary">
+        </p-inputNumber>
+        <span class="text-red-500 ml-2" *ngIf="
+          workingInsertReqDto.get('lastSalary')!.invalid &&
+          !workingInsertReqDto.get('lastSalary')!.value &&
+          (workingInsertReqDto.get('lastSalary')!.dirty ||
+            workingInsertReqDto.get('lastSalary')!.touched)
+        ">Input can't be empty</span>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="startDate">Start Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="startDate" dateFormat="dd/mm/yy" [required]="true" formControlName="startDateTemp"
+          [inline]="true" [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="endDate">End Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="endDate" dateFormat="dd/mm/yy" [required]="true" [inline]="true"
+          formControlName="endDateTemp" [showIcon]="true"></p-calendar>
+      </div>
+
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(workingInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+
+<!-- Dialog Add Project -->
+<p-dialog header="Add Project" [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false"
+  [resizable]="false" [modal]="true" [(visible)]="dialogProject">
+  <form [formGroup]="projectInsertReqDto" (ngSubmit)="onAddProject()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="projectName">Project Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="projectName" required type="text" formControlName="projectName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        projectInsertReqDto.get('projectName')!.invalid &&
+        !projectInsertReqDto.get('projectName')!.value &&
+        (projectInsertReqDto.get('projectName')!.dirty ||
+          projectInsertReqDto.get('projectName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="projectURL">Project URL <span class="text-red-500"> *</span> </label>
+        <input pInputText id="projectURL" required type="text" formControlName="projectUrl" />
+        <span class="text-red-500 ml-2" *ngIf="
+        projectInsertReqDto.get('projectUrl')!.invalid &&
+        !projectInsertReqDto.get('projectUrl')!.value &&
+        (projectInsertReqDto.get('projectUrl')!.dirty ||
+          projectInsertReqDto.get('projectUrl')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="description">Description <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="description" required rows="1" cols="50" formControlName="description"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        projectInsertReqDto.get('description')!.invalid &&
+        !projectInsertReqDto.get('description')!.value &&
+        (projectInsertReqDto.get('description')!.dirty ||
+          projectInsertReqDto.get('description')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="startDate">Start Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="startDate" dateFormat="dd/mm/yy" [required]="true" formControlName="startDateTemp"
+          [inline]="true" [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="endDate">End Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="endDate" dateFormat="dd/mm/yy" [required]="true" [inline]="true"
+          formControlName="endDateTemp" [showIcon]="true"></p-calendar>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(projectInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+
+<!-- Dialog Add Training -->
+<p-dialog header="Add Training" [modal]="true" [(visible)]="dialogTraining" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <form [formGroup]="trainingInsertReqDto" (ngSubmit)="onAddTraining()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="organization">Organization Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="organization" required type="text" formControlName="organizationName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        trainingInsertReqDto.get('organizationName')!.invalid &&
+        !trainingInsertReqDto.get('organizationName')!.value &&
+        (trainingInsertReqDto.get('organizationName')!.dirty ||
+          trainingInsertReqDto.get('organizationName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="training">Training Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="training" required type="text" formControlName="trainingName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        trainingInsertReqDto.get('trainingName')!.invalid &&
+        !trainingInsertReqDto.get('trainingName')!.value &&
+        (trainingInsertReqDto.get('trainingName')!.dirty ||
+          trainingInsertReqDto.get('trainingName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="description">Description <span class="text-red-500"> *</span> </label>
+        <textarea pInputTextarea id="description" required rows="1" cols="50" formControlName="description"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        trainingInsertReqDto.get('description')!.invalid &&
+        !trainingInsertReqDto.get('description')!.value &&
+        (trainingInsertReqDto.get('description')!.dirty ||
+          trainingInsertReqDto.get('description')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="startDate">Start Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="startDate" dateFormat="dd/mm/yy" [required]="true" formControlName="startDateTemp"
+          [inline]="true" [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="endDate">End Date <span class="text-red-500"> *</span> </label>
+        <p-calendar inputId="endDate" dateFormat="dd/mm/yy" [required]="true" [inline]="true"
+          formControlName="endDateTemp" [showIcon]="true"></p-calendar>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(trainingInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Add Documents -->
+<p-dialog header="Add Documents" [modal]="true" [(visible)]="dialogDocument" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+
+  <form [formGroup]="documentInsertReqDto" (ngSubmit)="onAddDocument()">
+    <div class="p-fluid p-formgrid grid">
+      <div class="field col-12">
+        <label for="docName">Document Name <span class="text-red-500"> *</span> </label>
+        <input pInputText id="docName" required type="text" formControlName="docName" />
+        <span class="text-red-500 ml-2" *ngIf="
+        documentInsertReqDto.get('docName')!.invalid &&
+        !documentInsertReqDto.get('docName')!.value &&
+        (documentInsertReqDto.get('docName')!.dirty ||
+          documentInsertReqDto.get('docName')!.touched)
+      ">Input can't be empty</span>
+      </div>
+      <div class="field col-12">
+        <label for="fileTypeCode">File Type <span class="text-red-500"> *</span> </label>
+        <p-dropdown inputId="fileTypeCode" [options]="fileTypes" optionLabel="typeName" optionValue="typeCode"
+          [showClear]="true" [required]="true" formControlName="fileTypeCode" placeholder="Choose File Type">
+        </p-dropdown>
+        <span class="text-red-500 ml-2" *ngIf="
+          documentInsertReqDto.get('fileTypeCode')!.invalid &&
+          !documentInsertReqDto.get('fileTypeCode')!.value &&
+          (documentInsertReqDto.get('fileTypeCode')!.dirty ||
+            documentInsertReqDto.get('fileTypeCode')!.touched)
+        ">Must be selected</span>
+      </div>
+
+      <div class="field col-12">
+        <label for="upload">Upload Document<span class="text-red-500"> *</span> </label>
+        <p-fileUpload id="upload" mode="basic" styleClass="bg-green-700" chooseLabel="Upload" chooseIcon="pi pi-upload"
+          class="form-control" (onSelect)="fileUploadDoc($event, doc)" #doc type="file" id="file" required>
+        </p-fileUpload>
+        <span class="text-red-500 ml-2" *ngIf="
+          documentInsertReqDto.get('fileName')!.invalid &&
+          !documentInsertReqDto.get('fileName')!.value &&
+          (documentInsertReqDto.get('fileName')!.dirty ||
+            documentInsertReqDto.get('fileName')!.touched)
+        ">Must upload a file</span>
+      </div>
+    </div>
+    <div class="field col-12">
+      <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Submit" class=" mr-2"
+        (clickChange)="checkForm(documentInsertReqDto)"></app-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog Delete Address -->
+<p-dialog header="Deleting Address" [modal]="true" [(visible)]="dialogDeleteAddress" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate address. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteAddress()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Education -->
+<p-dialog header="Deleting Education" [modal]="true" [(visible)]="dialogDeleteEducation"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate education. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteEducation()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Working Experience -->
+<p-dialog header="Deleting Working Experience" [modal]="true" [(visible)]="dialogDeleteWorking"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate working experience. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteWorking()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Training Experience -->
+<p-dialog header="Deleting Training Experience" [modal]="true" [(visible)]="dialogDeleteTraining"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate training experience. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteTraining()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Project Experience -->
+<p-dialog header="Deleting Project Experience" [modal]="true" [(visible)]="dialogDeleteProject"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate project experience. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteProject()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Skill -->
+<p-dialog header="Deleting Skill" [modal]="true" [(visible)]="dialogDeleteSkill" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate skill. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteSkill()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Language -->
+<p-dialog header="Deleting Skill" [modal]="true" [(visible)]="dialogDeleteLanguage" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate language. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteLanguage()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Family -->
+<p-dialog header="Deleting Family" [modal]="true" [(visible)]="dialogDeleteFamily" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate family. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteFamily()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Reference -->
+<p-dialog header="Deleting Reference" [modal]="true" [(visible)]="dialogDeleteReference"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate reference. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteReference()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<!-- Dialog Delete Document -->
+<p-dialog header="Deleting Document" [modal]="true" [(visible)]="dialogDeleteDocument"
+  [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p>
+    This action will delete the candidate document. Are you sure?
+  </p>
+  <app-button backgroundColor="secondary" [loading]="loading" label="No" class="mt-2 mr-2"
+    classBtn="p-button-secondary"></app-button>
+  <app-button backgroundColor="danger" (clickChange)="onDeleteDocument()" [loading]="loading" label="Yes" class="mt-2"
+    classBtn="p-button-danger"></app-button>
+</p-dialog>
+
+<p-scrollTop icon="pi pi-arrow-up"></p-scrollTop>

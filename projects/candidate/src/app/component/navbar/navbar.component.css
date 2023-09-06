@@ -1,0 +1,25 @@
+::ng-deep
+.p-menubar
+.p-menubar-root-list
+>.p-menuitem
+>.p-menuitem-content
+.p-menuitem-link
+.p-menuitem-text {
+  color: #286e33;
+}
+::ng-deep
+.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-content .p-menuitem-link .p-menuitem-icon {
+  color: #286e33;
+  margin-right: 0.5rem;
+}
+
+::ng-deep
+.p-menubar .p-menuitem > .p-menuitem-content .p-menuitem-link .p-menuitem-icon {
+  color: #286e33;
+  margin-right: 0.5rem;
+}
+
+::ng-deep
+.p-menubar .p-menuitem > .p-menuitem-content .p-menuitem-link .p-menuitem-text {
+  color: #286e33;
+}

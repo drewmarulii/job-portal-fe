@@ -1,0 +1,76 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+
+      <div class="grid mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>Candidate List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex md:justify-content-end justify-content-between">
+          <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/dashboard">
+          </app-button>
+          <app-button backgroundColor="var(--PRIMARY)" type="button" iconBtn="pi pi-fw pi-plus"
+            label="Add New Candidate" classBtn="p-button-primary" link="/candidates/new"></app-button>
+        </div>
+
+        <div class="card col-12">
+          <p-table [value]="candidates" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[10, 25, 50]" selectionMode="single" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  No
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    NIK
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Full Name
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Email
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Experience
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Status
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-c let-i="rowIndex">
+              <tr routerLink="/candidates/detail/{{ c.id }}" class="cursor-pointer">
+                <td>{{ i+1 }}</td>
+                <td>{{ c.nik }}</td>
+                <td>{{ c.fullname }}</td>
+                <td>{{ c.userEmail }}</td>
+                <td *ngIf=" c.experience>0">{{ c.experience }} Years</td>
+                <td *ngIf="c.experience == 0 ||c.experience == null">-</td>
+                <td>
+                  <p-badge [value]="c.candidateStatus" size="large" [severity]="checker(c.candidateStatus)"></p-badge>
+
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No candidates found.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

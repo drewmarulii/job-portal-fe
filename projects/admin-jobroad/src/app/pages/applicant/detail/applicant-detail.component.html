@@ -1,0 +1,339 @@
+<div class="container">
+  <div class="grid">
+    <div class="col-12 mt-3">
+      <p-card header="Application Progress">
+
+        <p-steps [model]="status" [readonly]="false" [activeIndex]="activeIndex"
+          (activeIndexChange)="onActiveIndexChange($event)"></p-steps>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-5 buttons">
+      <app-button iconBtn="pi pi-angle-left" type="button" label="Job Detail" class="mr-2" classBtn="p-button-secondary"
+        link="/jobs/detail/{{jobId}}">
+      </app-button>
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isApplied && (isOwner || isAdmin)" type="button"
+        label="Assesment" (click)="assesmentClick()" class="mr-2" classBtn="p-button-primary"></app-button>
+
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isAssesment && isHr" type="button" label="Update Notes"
+        (click)="assesmentNoteClick()" class="mr-2" classBtn="p-button-secondary mt-2"></app-button>
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isAssesment && (isOwner || isAdmin )" type="button"
+        label="Interview" (click)="interviewClick()" class="mr-2" classBtn="p-button-primary mt-2"></app-button>
+
+
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isInterview && isPic" type="button" label="Update Notes"
+        (click)="interviewNoteClick()" class="mr-2" classBtn="p-button-secondary mt-2"></app-button>
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isInterview && (isOwner || isAdmin)" type="button"
+        label="Medical CheckUp" (click)="mcuClick()" class="mr-2" classBtn="p-button-primary mt-2"></app-button>
+
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isMcu && (isOwner || isAdmin)" type="button"
+        label="Offering Letter" (click)="offeringClick()" class="mr-2" classBtn="p-button-primary mt-2"></app-button>
+
+      <app-button backgroundColor="var(--PRIMARY)" *ngIf="isOffering && (isOwner || isAdmin)"
+        backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Accept" iconBtn="pi pi-user-plus"
+        class="mt-2" (click)="accept()"></app-button>
+
+
+    </div>
+    <div class="col-12 md:col-3 md:col-offset-4 buttons">
+      <p-dropdown [options]="dropMenu" styleClass="mr-2" [style]="{'height' : '2.5rem'}" (onChange)="moveTo($event)"
+        placeholder="Move To ?" *ngIf="isOwner || isAdmin"></p-dropdown>
+      <app-button type="button" *ngIf=" isOwner || isAdmin" (click)="reject()" iconBtn="pi pi-times" label="Reject"
+        class="mr-2" classBtn="p-button-danger"></app-button>
+    </div>
+    <candidate-detail class="col-12" *ngIf="isApplied"></candidate-detail>
+    <div class="col-12 " *ngIf="isApplied">
+
+      <!-- Modal Form Insert Assesment -->
+      <p-dialog header="Assesment Form" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+        [responsive]="true" [modal]="true" [(visible)]="assesmentForm">
+        <form [formGroup]="assesmentReqDto" (ngSubmit)="submitAssesment()">
+          <div class="p-fluid p-formgrid grid assesment align-items-center">
+            <div class="col-12 md:col-4">
+              <label for="location">Location <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <input pInputText id="location" formControlName="assesmentLocation" type="text" required />
+              <span class="text-red-500 ml-2" *ngIf="
+            assesmentReqDto.get('assesmentLocation')!.invalid &&
+            !assesmentReqDto.get('assesmentLocation')!.value &&
+            (assesmentReqDto.get('assesmentLocation')!.dirty ||
+              assesmentReqDto.get('assesmentLocation')!.touched)
+          ">Input can't be empty</span>
+            </div>
+            <div class="col-12 md:col-4">
+              <label for="date">Date <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <!-- <input pInputText id="date" required type="datetime-local" formControlName="assesmentDate" /> -->
+              <p-calendar [inline]="true" [showTime]="true" [showSeconds]="true" inputId="date" [required]="true"
+                formControlName="assesmentDateTemp" [showIcon]="true" dateFormat="dd/mm/yy" inputStyleClass="w-full"
+                styleClass="w-full"></p-calendar>
+              <span class="text-red-500 ml-2" *ngIf="
+            assesmentReqDto.get('assesmentDateTemp')!.invalid &&
+            !assesmentReqDto.get('assesmentDateTemp')!.value &&
+            (assesmentReqDto.get('assesmentDateTemp')!.dirty ||
+            assesmentReqDto.get('assesmentDateTemp')!.touched)
+          ">Input can't be empty</span>
+            </div>
+            <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+              iconBtn="pi pi-plus" class=" mr-2" (clickChange)="checkForm(assesmentReqDto)"></app-button>
+          </div>
+        </form>
+
+        <!-- </p-card> -->
+      </p-dialog>
+    </div>
+    <div class="assesment col-12 justify-content-center" *ngIf="isAssesment">
+      <p-card header="Assesment">
+        <div class="grid">
+          <div class="col-5 md:col-5"><i class="pi pi-calendar"></i> Date</div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-6 md:col-6">{{assesmentData?.assesmentDate}}</div>
+
+          <div class="col-4 md:col-5"><i class="pi pi-home"></i> <b> Location</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{assesmentData?.assesmentLocation}}</div>
+
+          <div class="col-4 md:col-5"><i class="pi pi-book"></i> <b> Notes</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{assesmentData?.notes}}</div>
+
+        </div>
+        <!-- </div> -->
+      </p-card>
+
+
+      <!-- Modal Update Assesment Notes -->
+      <p-dialog header="Update Assesment Notes" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+        [modal]="true" [(visible)]="assesmentNoteForm">
+        <form [formGroup]="assesmentNotesReqDto" (ngSubmit)="assesmentNotesUpdate()">
+          <div class="grid">
+            <div class="col-12">
+              <label for="notes">Notes <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12">
+              <textarea pInputTextarea id="notes" class="col-12" rows="10" formControlName="notes"></textarea>
+              <span class="text-red-500 ml-2" *ngIf="
+            assesmentNotesReqDto.get('notes')!.invalid &&
+            !assesmentNotesReqDto.get('notes')!.value &&
+            (assesmentNotesReqDto.get('notes')!.dirty ||
+              assesmentNotesReqDto.get('notes')!.touched)
+          ">Input can't be empty</span>
+            </div>
+          </div>
+          <app-button backgroundColor="var(--PRIMARY)" (clickChange)="checkForm(assesmentNotesReqDto)" typeBtn="submit"
+            label="Add" iconBtn="pi pi-plus" class=" mr-2"></app-button>
+        </form>
+      </p-dialog>
+    </div>
+    <div class="col-10 " *ngIf="isAssesment">
+
+      <!-- Modal Form Insert Interview -->
+      <p-dialog header="Interview Form" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [modal]="true"
+        [(visible)]="interviewForm">
+        <form [formGroup]="interviewReqDto" (ngSubmit)="interviewSubmit()">
+          <div class="p-formgrid grid assesment align-items-center">
+            <div class="col-12 md:col-4">
+              <label for="location">Location <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <input pInputText id="location" formControlName="interviewLocation" type="text" required />
+              <span class="text-red-500 ml-2" *ngIf="
+            interviewReqDto.get('interviewLocation')!.invalid &&
+            !interviewReqDto.get('interviewLocation')!.value &&
+            (interviewReqDto.get('interviewLocation')!.dirty ||
+              interviewReqDto.get('interviewLocation')!.touched)
+          ">Input can't be empty</span>
+            </div>
+            <div class="col-12 md:col-4">
+              <label for="date">Date <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <p-calendar [inline]="true" inputId="date" [required]="true" [showTime]="true" [showSeconds]="true"
+                formControlName="interviewDateTemp" [showIcon]="true" dateFormat="dd/mm/yy" inputStyleClass="w-full"
+                styleClass="w-full"></p-calendar>
+              <span class="text-red-500 ml-2" *ngIf="
+            interviewReqDto.get('interviewDateTemp')!.invalid &&
+            !interviewReqDto.get('interviewDateTemp')!.value &&
+            (interviewReqDto.get('interviewDateTemp')!.dirty ||
+              interviewReqDto.get('interviewDateTemp')!.touched)
+          ">Input can't be empty</span>
+            </div>
+            <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+              iconBtn="pi pi-plus" (clickChange)="checkForm(interviewReqDto)" class=" mr-2"></app-button>
+          </div>
+        </form>
+      </p-dialog>
+    </div>
+    <div class="interview col-12" *ngIf="isInterview">
+      <p-card header="Interview Data ">
+
+        <div class="grid">
+          <div class="col-4 md:col-5"><i class="pi pi-calendar"></i><b> Date</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{interviewData?.interviewDate}}</div>
+
+          <div class="col-4 md:col-5"><i class="pi pi-home"></i><b> Location</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{interviewData?.interviewLocation}}</div>
+
+          <div class="col-4 md:col-5"><i class="pi pi-book"></i><b> Notes</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{reviewData?.notes}}</div>
+
+          <div class="col-4 md:col-5"><i class="pi pi-info-circle"></i><b> Score</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{reviewData?.score}}</div>
+        </div>
+      </p-card>
+
+      <!-- Modal Update Interview Notes -->
+      <p-dialog header="Update Interview Notes" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+        [(visible)]="interviewNoteForm" [modal]="true">
+        <form [formGroup]="reviewReqDto" (ngSubmit)="interviewNotesUpdate()">
+          <div class="grid">
+            <div class="col-12">
+              <label for="notes">Notes <span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12">
+              <textarea pInputTextarea id="notes" class="col-12" rows="10" formControlName="notes"></textarea>
+              <span class="text-red-500 ml-2" *ngIf="
+            reviewReqDto.get('notes')!.invalid &&
+            !reviewReqDto.get('notes')!.value &&
+            (reviewReqDto.get('notes')!.dirty ||
+              reviewReqDto.get('notes')!.touched)
+          ">Input can't be empty</span>
+            </div>
+          </div>
+          <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+            iconBtn="pi pi-plus" class=" mr-2" (clickChange)="checkForm(reviewReqDto)"></app-button>
+        </form>
+      </p-dialog>
+
+      <!-- Modal Form Insert MCU  -->
+      <p-dialog header="Upload Medical Check Up File" [responsive]="true" [breakpoints]="{ '960px': '75vw' }"
+        [style]="{ width: '50vw' }" [modal]="true" [(visible)]="mcuForm">
+        <form [formGroup]="mcuReqDto" (ngSubmit)="submitMcu()">
+          <p-fileUpload mode="advanced" chooseLabel="Choose" styleClass="bg-green-700" chooseIcon="pi pi-upload"
+            class="form-control mb-2" [multiple]="true" [showUploadButton]="false" type="file" id="picture"
+            (onSelect)="fileUpload($event)" (onRemove)="fileRemove($event)" (onClear)="fileCancel()" required>
+          </p-fileUpload>
+          <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+            iconBtn="pi pi-plus" classBtn="mt-2"></app-button>
+        </form>
+      </p-dialog>
+    </div>
+    <div class="contact-person" *ngIf="isAssesment || isInterview">
+      <p-card>
+        <div class="grid">
+          <div class="col-12 md:col-12">
+            <h3>Contact Person</h3>
+            <hr>
+          </div>
+          <div class="col-2 md:col-5"><b>Name</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{pic?.fullName}}</div>
+          <div class="col-2 md:col-5"><b>Email</b></div>
+          <div class="col-1 md:col-1">:</div>
+          <div class="col-12 md:col-6">{{pic?.email}}</div>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="mcu col-12" *ngIf="isMcu">
+      <p-card header="Medical Check Up Data">
+        <p-table [value]="mcuDatas">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                No
+              </th>
+              <th>
+                FileName
+              </th>
+              <th>
+                File Extension
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-m let-i="rowIndex">
+            <tr>
+              <td>{{i+1}}</td>
+              <td><a [href]="m.id | url">file-{{i+1}}</a></td>
+              <td>{{m.fileExtension}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+
+      <p-dialog header="Form Offering Letter" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }"
+        [modal]="true" [(visible)]="offeringForm" [modal]="true">
+        <form [formGroup]="offeringReqDto" (ngSubmit)="offeringSubmit()">
+          <div class="grid">
+            <div class="col-12 md:col-4">
+              <label for="address">Address<span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <textarea pInputTextarea id="address" formControlName="address" class="col-12" rows="10"></textarea>
+            </div>
+            <div class="col-12 md:col-4">
+              <label htmlFor="salary">Salary<span class="text-red-500">*</span></label>
+            </div>
+            <div class="col-12 md:col-8">
+              <p-inputNumber id="salary" inputId="max" mode="currency" currency="IDR" locale="id-ID"
+                formControlName="salary"></p-inputNumber>
+            </div>
+            <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+              iconBtn="pi pi-plus" class="mt-2"></app-button>
+          </div>
+        </form>
+      </p-dialog>
+    </div>
+
+    <div class="offering-letter col-12 flex justify-content-center " *ngIf="isOffering">
+      <h3>Waiting for candidate to accept the offer ....</h3>
+      <p-dialog [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [modal]="true" [(visible)]="hiringForm"
+        header="Hiring Form">
+        <form [formGroup]="hiringReqDto" (ngSubmit)="hiringSubmit()">
+          <div class="start">
+            <div class="grid mt-3">
+              <div class="col-12 md:col-4">
+                <label for="start-date">Start <span class="text-red-500">*</span></label>
+              </div>
+              <div class="col-12 md:col-8">
+                <p-calendar [inline]="true" inputId="start-date" [required]="true" formControlName="startDateTemp"
+                  [showIcon]="true" dateFormat="dd/mm/yy" inputStyleClass="w-full" styleClass="w-full"></p-calendar>
+                <span class="text-red-500 ml-2" *ngIf="
+              hiringReqDto.get('startDate')!.invalid &&
+              !hiringReqDto.get('startDate')!.value &&
+              (hiringReqDto.get('startDate')!.dirty ||
+                hiringReqDto.get('startDate')!.touched)
+            ">Input can't be empty</span>
+              </div>
+            </div>
+            <div class="end-date" *ngIf="job?.employementTypeName == intern || job?.employementTypeName == contract">
+              <div class="grid">
+                <div class="col-12 md:col-4">
+                  <label for="end-date">End Date</label>
+                </div>
+                <div class="col-12 md:col-8">
+                  <p-calendar [inline]="true" inputId="end-date" [required]="true" formControlName="endDateTemp"
+                    [showIcon]="true" dateFormat="dd/mm/yy" inputStyleClass="w-full" styleClass="w-full"></p-calendar>
+                  <span class="text-red-500 ml-2" *ngIf="
+                hiringReqDto.get('startDate')!.invalid &&
+                !hiringReqDto.get('startDate')!.value &&
+                (hiringReqDto.get('startDate')!.dirty ||
+                  hiringReqDto.get('startDate')!.touched)
+              ">Input can't be empty</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-button backgroundColor="var(--PRIMARY)" [loading]="loading" typeBtn="submit" label="Add"
+            iconBtn="pi pi-plus" class="mt-2"></app-button>
+        </form>
+      </p-dialog>
+
+    </div>
+  </div>
+</div>

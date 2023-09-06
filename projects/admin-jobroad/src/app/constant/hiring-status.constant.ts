@@ -1,0 +1,4 @@
+export enum HiringStatusEnum{
+    APPLIED = 'S-001',ASSESMENT='S-002',INTERVIEW_USER='S-003',MCU='S-004',
+    OFFERING='S-005',HIRED='S-006',REJECT='S-007'
+}

@@ -1,0 +1,23 @@
+::ng-deep .card-hover:hover {
+  background-color: rgb(222, 222, 222);
+}
+
+::ng-deep .card-scroll {
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.small-card-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+::ng-deep .title-hover:hover {
+  text-decoration: underline;
+}
+
+::ng-deep .p-card .p-card-content {
+padding: 0.25rem 0;
+}

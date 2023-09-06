@@ -1,0 +1,80 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <div class="grid mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>Report List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex justify-content-end">
+          <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/dashboard">
+          </app-button>
+        </div>
+        <div class="col-12 ">
+          <div class="grid grid-nogutter mt-3">
+            <div class="col-12 md:col-12">
+              <div [formGroup]="filterData">
+                <div class="grid grid-nogutter pl-1">
+                  <div class="col-12 md:col-4 pr-1">
+                    <div class="p-input-icon-left w-full">
+                      <i class="pi pi-search"></i>
+                      <p-calendar inputId="start" [required]="true" [showIcon]="true" formControlName="startDateTemp"
+                        dateFormat="dd/mm/yy" inputStyleClass="w-full" styleClass="w-full"
+                        (onSelect)="convertStartDate($event)" placeholder="Start Date">
+                      </p-calendar>
+                    </div>
+                  </div>
+                  <div class="col-12 md:col-4 pr-1">
+                    <div class="p-input-icon-left w-full">
+                      <i class="pi pi-building"></i>
+                      <p-calendar inputId="end" [required]="true" [showIcon]="true" formControlName="endDateTemp"
+                        dateFormat="dd/mm/yy" inputStyleClass="w-full" styleClass="w-full mt-2 md:mt-0"
+                        (onSelect)="convertEndDate($event)" placeholder="End Date">
+                      </p-calendar>
+                    </div>
+                  </div>
+
+                  <div class="col-12 md:col-4 flex align-item-center">
+                    <app-button label="Search" (click)="filter()" backgroundColor="var(--PRIMARY)"
+                      iconBtn="pi pi-search" classBtn="mt-2 md:mt-0">
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-nogutter p-2">
+                <a *ngIf="filterData.valid" [href]="reportUrl">Download Report</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card col-12">
+          <p-table [value]="reports" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[10, 25, 50]" selectionMode="single">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="min-width:10rem">No</th>
+                <th style="min-width:10rem">Candidate Name</th>
+                <th style="min-width:10rem">Job Name</th>
+                <th style="min-width:10rem">Time(Days)</th>
+                <th style="min-width:10rem">Employment Type Name</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-r let-i="rowIndex">
+              <tr>
+                <td>{{i+1}}</td>
+                <td>{{r.fullName}}</td>
+                <td>{{r.jobName}}</td>
+                <td>{{r.timeDifference}}</td>
+                <td>{{r.employmentTypeName}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>

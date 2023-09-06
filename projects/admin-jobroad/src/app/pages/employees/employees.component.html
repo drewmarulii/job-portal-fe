@@ -1,0 +1,104 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+
+      <div class="grid mb-3 upper-container flex justify-content-between align-items-center">
+        <div class="col-12 md:col-9 title">
+          <h2>Employee List</h2>
+        </div>
+        <div class="col-12 md:col-3 buttons flex justify-content-end">
+          <app-button type="button" label="Back" class="mr-2" classBtn="p-button-secondary" link="/dashboard">
+          </app-button>
+
+        </div>
+
+        <div class="card col-12">
+          <p-table [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[10, 25, 50]" [value]="employees" selectionMode="single">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  No
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Employee Name
+                  </div>
+                </th>
+                <th style="min-width:10rem">
+                  <div class="flex align-items-center">
+                    Employee Email
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Phone Number
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Job Name
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Company Url
+
+                  </div>
+                </th>
+                <th style="min-width:15rem">
+                  <div class="flex align-items-center">
+                    Employment Type Name
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="7">No Employees found.</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-e let-i="rowIndex">
+              <tr (click)="showDialog(e.id)" class="cursor-pointer">
+                <td>{{i+1}}</td>
+                <td>{{e.candidateName}}</td>
+                <td>{{e.candidateEmail}}</td>
+                <td>{{e.phoneNumber}}</td>
+                <td>{{e.jobName}}</td>
+                <td>{{e.companyUrl}}</td>
+                <td>{{e.employmentTypeName}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog header="Blacklist Form" [(visible)]="visible" [modal]="true" [breakpoints]="{ '960px': '95vw' }"
+  [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+
+  <form [formGroup]="blacklistReqDto" (ngSubmit)="onSubmit()">
+
+    <div class="grid">
+      <div class="col-12 md:col-6">
+        Blacklist Reason <span class="text-red-500">*</span> :
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <textarea rows="5" cols="50" pInputTextarea formControlName="notes" class="w-full"></textarea>
+        <span class="text-red-500 ml-2" *ngIf="
+        blacklistReqDto.get('notes')!.invalid &&
+        !blacklistReqDto.get('notes')!.value &&
+        (blacklistReqDto.get('notes')!.dirty ||
+          blacklistReqDto.get('notes')!.touched)
+      ">Input can't be empty</span>
+      </div>
+    </div>
+    <app-button backgroundColor="var(--PRIMARY)" typeBtn="submit" label="Submit"
+      (clickChange)="checkForm(blacklistReqDto)"></app-button>
+  </form>
+
+</p-dialog>

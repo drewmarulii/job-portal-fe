@@ -1,0 +1,58 @@
+<div class="grid grid-nogutter p-2">
+  <h1>Company Detail</h1>
+
+</div>
+
+<div class="grid grid-nogutter p-2">
+  <div class="col-12">
+    <p-card header=" {{company?.companyName}}">
+      <div class="grid text-center">
+        <div class="col-5 "></div>
+        <img alt="Card" [src]="company?.photoId|url" style="width: 290px; height: 290px;" />
+      </div>
+      <div class="grid">
+        <div class="col-12">
+
+          <i class="pi pi-building"></i> {{ company?.address }}
+        </div>
+        <div class="col-12">
+          <i class="pi pi-link"></i> {{ company?.companyUrl }}
+        </div>
+        <div class="col-12">
+          <i class="pi pi-phone"></i> {{ company?.companyPhone }}
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+
+</div>
+
+<div class="grid grid-nogutter p-2">
+  <h2>List Job {{company?.companyName}}</h2>
+</div>
+<div class="grid grid-nogutter">
+  <div class="col-12 md:col-4 mb-3 p-2" *ngFor="let j of jobsByCompany">
+    <p-card>
+      <div class="grid grid-nogutter">
+        <h3>{{j.jobName}}</h3>
+      </div>
+      <div class="grid grid-nogutter">
+        <div class="col-12">
+          <i class="pi pi-briefcase"></i> {{j.employementTypeName}}
+        </div>
+        <div class="col-12">
+          <i class="pi pi-money-bill"></i> {{j.expectedSalaryMin}} - {{j.expectedSalaryMax}}
+        </div>
+        <div class="col-12">
+          <i class="pi pi-clock"></i> {{j.startDate}} - {{j.endDate}}
+        </div>
+
+      </div>
+      <ng-template pTemplate="footer">
+        <app-button (clickChange)="jobDetail(j.id)" label="Job Detail" backgroundColor="var(--PRIMARY)">
+        </app-button>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

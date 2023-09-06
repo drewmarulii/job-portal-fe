@@ -1,0 +1,3 @@
+export enum employmentTypeEnum {
+    INTERN ='INTERN',PART_TIME='PART TIME',CONTRACT='CONTRACT',FULL_TIME='FULL TIME'
+}
